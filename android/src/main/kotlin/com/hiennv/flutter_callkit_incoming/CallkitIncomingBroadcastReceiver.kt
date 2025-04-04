@@ -2,13 +2,11 @@ package com.hiennv.flutter_callkit_incoming
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
-import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.core.content.ContextCompat
 
 class CallkitIncomingBroadcastReceiver : BroadcastReceiver() {
 
@@ -87,9 +85,7 @@ class CallkitIncomingBroadcastReceiver : BroadcastReceiver() {
             "${context.packageName}.${CallkitConstants.ACTION_CALL_INCOMING}" -> {
                 try {
                     val incomingData = Data.fromBundle(data);
-                    val keyguardManager = ContextCompat.getSystemService(context, KeyguardManager::class.java)
-                    val isPhoneLocked = keyguardManager?.isKeyguardLocked ?: false
-                    if(incomingData.isFullScreen || isPhoneLocked){
+                    if(incomingData.isFullScreen){
                         val intent = CallkitIncomingActivity.getIntent(context, data)
                         context.startActivity(intent)
                     }else{
