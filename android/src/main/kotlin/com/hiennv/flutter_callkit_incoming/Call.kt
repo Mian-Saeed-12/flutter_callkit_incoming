@@ -232,6 +232,10 @@ data class Data(val args: Map<String, Any?>) {
             CallkitConstants.EXTRA_CALLKIT_IS_BOT,
             isBot,
         )
+        bundle.putBoolean(
+            CallkitConstants.EXTRA_CALLKIT_IS_FULL_SCREEN,
+            isFullScreen,
+        )
         return bundle
     }
 
@@ -259,6 +263,8 @@ data class Data(val args: Map<String, Any?>) {
                 bundle.getBoolean(CallkitConstants.EXTRA_CALLKIT_IS_IMPORTANT, false)
             data.isBot =
                 bundle.getBoolean(CallkitConstants.EXTRA_CALLKIT_IS_BOT, false)
+            data.isFullScreen =
+                bundle.getBoolean(CallkitConstants.EXTRA_CALLKIT_IS_FULL_SCREEN, false)
 
             data.missedNotificationId =
                 bundle.getInt(CallkitConstants.EXTRA_CALLKIT_MISSED_CALL_ID)

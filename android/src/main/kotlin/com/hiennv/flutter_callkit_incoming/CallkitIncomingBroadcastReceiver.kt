@@ -84,6 +84,7 @@ class CallkitIncomingBroadcastReceiver : BroadcastReceiver() {
         when (action) {
             "${context.packageName}.${CallkitConstants.ACTION_CALL_INCOMING}" -> {
                 try {
+
                     val incomingData = Data.fromBundle(data);
                     if(incomingData.isFullScreen){
                         val intent = CallkitIncomingActivity.getIntent(context, data)
