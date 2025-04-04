@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.core.content.ContextCompat
 
 class CallkitIncomingBroadcastReceiver : BroadcastReceiver() {
 
@@ -87,7 +88,7 @@ class CallkitIncomingBroadcastReceiver : BroadcastReceiver() {
                 try {
                     val incomingData = Data.fromBundle(data);
                     val keyguardManager = ContextCompat.getSystemService(context, KeyguardManager::class.java)
-                    val isPhoneLocked = keyguardManager.isKeyguardLocked
+                    val isPhoneLocked = keyguardManager?.isKeyguardLocked ?: false
                     if(incomingData.isFullScreen || isPhoneLocked){
                         val intent = CallkitIncomingActivity.getIntent(context, data)
                         context.startActivity(intent)
