@@ -2,6 +2,7 @@ package com.hiennv.flutter_callkit_incoming
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
+import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -84,14 +85,22 @@ class CallkitIncomingBroadcastReceiver : BroadcastReceiver() {
         when (action) {
             "${context.packageName}.${CallkitConstants.ACTION_CALL_INCOMING}" -> {
                 try {
-                    callkitNotificationManager.showIncomingNotification(data)
-                    sendEventFlutter(CallkitConstants.ACTION_CALL_INCOMING, data)
-                    addCall(context, Data.fromBundle(data))
-                    if (callkitNotificationManager.incomingChannelEnabled()) {
-                        val soundPlayerServiceIntent =
+                    val incomingData = Data.fromBundle(data);
+                    val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+                    val isPhoneLocked = keyguardManager.isKeyguardLocked
+                    if(incomingData.isFullScreen || isPhoneLocked){
+                        val intent = CallkitIncomingActivity.getIntent(context, data)
+                        context.startActivity(intent)
+                    }else{
+                        callkitNotificationManager.showIncomingNotification(data)
+                        sendEventFlutter(CallkitConstants.ACTION_CALL_INCOMING, data)
+                        addCall(context, Data.fromBundle(data))
+                        if (callkitNotificationManager.incomingChannelEnabled()) {
+                            val soundPlayerServiceIntent =
                                 Intent(context, CallkitSoundPlayerService::class.java)
-                        soundPlayerServiceIntent.putExtras(data)
-                        context.startService(soundPlayerServiceIntent)
+                            soundPlayerServiceIntent.putExtras(data)
+                            context.startService(soundPlayerServiceIntent)
+                        }
                     }
                 } catch (error: Exception) {
                     Log.e(TAG, null, error)
