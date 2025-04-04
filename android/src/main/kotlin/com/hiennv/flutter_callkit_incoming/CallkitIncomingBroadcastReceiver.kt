@@ -86,7 +86,7 @@ class CallkitIncomingBroadcastReceiver : BroadcastReceiver() {
             "${context.packageName}.${CallkitConstants.ACTION_CALL_INCOMING}" -> {
                 try {
                     val incomingData = Data.fromBundle(data);
-                    val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+                    val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
                     val isPhoneLocked = keyguardManager.isKeyguardLocked
                     if(incomingData.isFullScreen || isPhoneLocked){
                         val intent = CallkitIncomingActivity.getIntent(context, data)
